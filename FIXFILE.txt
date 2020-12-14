@@ -1,0 +1,30 @@
+
+@echo off
+
+start C:\"Program files"\"Genshin Impact"\launcher.exe
+
+timeout /t 2 /nobreak
+
+
+
+:launcher_check
+
+tasklist /fi "IMAGENAME EQ launcher.exe" |find "launcher.exe" > nul
+
+if not errorlevel 1 (goto gi_check) else (exit)
+
+
+
+:gi_check
+
+tasklist /fi "IMAGENAME EQ GenshinImpact.exe" |find "GenshinImpact.exe" > nul
+
+if errorlevel 1 (timeout /t 1 /nobreak && goto launcher_check) else (goto gi_close_check)
+
+
+
+:gi_close_check
+
+tasklist /fi "IMAGENAME EQ GenshinImpact.exe" |find "GenshinImpact.exe" > nul
+
+if not errorlevel 1 (timeout /t 30 /nobreak && goto gi_close_check) else (sc stop mhyprot2 && goto launcher_check)
